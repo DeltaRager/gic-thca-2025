@@ -1,1 +1,7 @@
 gic_venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.python-version
+.vscode/
+.env

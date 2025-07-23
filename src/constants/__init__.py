@@ -1,1 +1,2 @@
-from .directions import Direction
+from .directions import Direction, DirectionMap
+from .commands import Command

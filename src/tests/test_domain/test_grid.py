@@ -76,7 +76,7 @@ class TestCar:
         grid.add_car("B", 2, 2, Direction.SOUTH, "")
 
         result = grid.check_collisions()
-        assert result == False
+        assert result["collision"] == False
 
     def test_check_collisions_with_collision(self):
         grid = Grid(size_x=5, size_y=5)
@@ -89,7 +89,9 @@ class TestCar:
         grid.cars["B"].y = 3
 
         result = grid.check_collisions()
-        assert result == True
+        assert result["cars"] == ["A", "B"]
+        assert result["collision"] == True
+        assert result["position"] == (2, 3)
 
     def test_next_step_with_commands(self):
         grid = Grid(size_x=5, size_y=5)

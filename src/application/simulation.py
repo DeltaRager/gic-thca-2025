@@ -41,7 +41,8 @@ class Simulation:
 
         for step in range(self.max_step):
             self.logger.debug(f"Step {step + 1}:")
-            collision_detected = self.grid.next_step()
+            collision_result = self.grid.next_step()
+            collision_detected = collision_result["collision"]
             self.logger.debug("-" * 20)
             if collision_detected:
                 break

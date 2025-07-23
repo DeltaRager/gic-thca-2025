@@ -79,7 +79,7 @@ class Grid(BaseModel):
             raise ValueError(f"Car with id '{id}' does not exist")
         del self.cars[id]
 
-    def check_collisions(self) -> bool:
+    def check_collisions(self):
         positions = {}
         for car_id, car in self.cars.items():
             pos = car.position
@@ -98,11 +98,11 @@ class Grid(BaseModel):
                 print()
                 print(f"{pos[0]} {pos[1]}")
                 print(self.current_step)
-                return True
+                return {"collision": True, "cars": car_ids, "position": pos}
 
         self.logger.debug("No collisions detected")
 
-        return False
+        return {"collision": False}
 
     def next_step(self) -> None:
         for car_id, car in self.cars.items():

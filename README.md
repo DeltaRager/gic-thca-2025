@@ -36,7 +36,7 @@ src/
 
 ## Prerequisites
 
-- Python 3.8 or higher
+- Python 3.12
 - Git
 
 ## Local Development Setup
@@ -44,7 +44,7 @@ src/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/DeltaRager/gic-thca-2025.git
 cd gic-thca-2025
 ```
 

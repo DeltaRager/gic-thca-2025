@@ -1,12 +1,17 @@
-from pydantic import BaseModel, field_validator, PrivateAttr
-from src.constants import Direction, DirectionMap, Command
-from .grid import Grid
+from pydantic import BaseModel, field_validator, PrivateAttr, ConfigDict
+from constants import Direction, Command
+from .interfaces import CommandParser, MovementStrategy
 
 class Car(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     x: int
     y: int
-    direction: Direction = Direction.NORTH  
-    _commands: list[str] = PrivateAttr([])
+    direction: Direction = Direction.NORTH
+    command_parser: CommandParser
+    forward_strategy: MovementStrategy
+    turn_strategy: MovementStrategy
+    _commands: list[Command] = PrivateAttr(default_factory=list)
 
     @field_validator('x', 'y')
     def must_be_non_negative(cls, value):
@@ -28,41 +33,25 @@ class Car(BaseModel):
     def movement_vector(self) -> tuple[int, int]:
         return self.direction.value
     
-    def add_command(self, command: str) -> None:
-        commands = command.split('')
-        for cmd in commands:
-            if cmd == 'F':
-                self._commands.append(Command.F)
-            elif cmd in (Command.L, Command.R):
-                self._commands.append(Command(cmd))
+    def add_commands(self, command_string: str) -> None:
+        parsed_commands = self.command_parser.parse(command_string)
+        self._commands.extend(parsed_commands)
 
-        self._commands.append(command)
+    def get_next_command(self, current_step: int) -> Command:
+        if current_step < len(self._commands):
+            return self._commands[current_step]
+        return None
 
-    def calculate_command(self, command: Command) -> None:
-        new_x, new_y = self.x, self.y
-        new_direction = self.direction
+    def calculate_command(self, command: Command) -> tuple[int, int, Direction]:
         if command == Command.F:
-            dx, dy = self.movement_vector
-            new_x += dx
-            new_y += dy
+            return self.forward_strategy.execute(self.x, self.y, self.direction, command)
         elif command in (Command.L, Command.R):
-            try:
-                new_direction = DirectionMap.turn_map[self.direction][command]
-            except KeyError:
-                raise ValueError(
-                    f"Invalid turn '{command}' for direction '{self.direction}'"
-                )
+            return self.turn_strategy.execute(self.x, self.y, self.direction, command)
         else:
             raise ValueError(f"Unknown command: {command}")
-        
-        return new_x, new_y, new_direction
     
-    def move(self, command: Command, grid: Grid) -> None:
+    def move(self, command: Command) -> None:
         x, y, direction = self.calculate_command(command)
-
-        if not grid.is_within_bounds(x, y):
-            raise ValueError(f"Move out of bounds: ({x}, {y}) on grid size {grid.size}")
-
         self.x = x
         self.y = y
         self.direction = direction

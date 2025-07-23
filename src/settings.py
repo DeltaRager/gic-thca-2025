@@ -5,6 +5,8 @@ from pathlib import Path
 
 class Settings(BaseSettings):
     max_grid_size: int = 20
+    max_grid_size_x: int = 20
+    max_grid_size_y: int = 20
     log_level: str = "info"
 
 def load_settings():

@@ -1,0 +1,12 @@
+10 10
+
+A
+1 2 N
+FFRFFFFFRL
+
+B
+7 8 W
+FFLFFFFFFF
+
+C
+5 4 S

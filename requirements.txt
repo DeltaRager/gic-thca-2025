@@ -15,3 +15,4 @@ python-dotenv<=1.1.1
 tomli<=2.2.1
 typing-inspection<=0.4.1
 typing_extensions<=4.14.1
+streamlit<=1.39.0

@@ -1,1 +1,1 @@
-PYTHONPATH=src python src/main.py sample_input.txt
+PYTHONPATH=src python src/main.py input.txt

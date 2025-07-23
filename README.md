@@ -72,12 +72,6 @@ source gic_venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Install Project in Development Mode
-
-```bash
-pip install -e .
-```
-
 ## Running the Application
 
 ### Web Interface (Streamlit)
@@ -103,7 +97,7 @@ The application will open in your browser at `http://localhost:8501`
 Run simulations via command line:
 
 ```bash
-PYTHONPATH=src python src/main.py sample_input.txt
+PYTHONPATH=src python src/main.py input.txt
 ```
 
 Or use the provided script:
@@ -114,7 +108,7 @@ Or use the provided script:
 
 ## Input Format
 
-The simulation accepts input in the following format:
+The simulation accepts input in the following format (in input.txt):
 
 ```
 grid_size_x grid_size_y
@@ -148,10 +142,16 @@ C
 ### Input Rules:
 - **Grid Size**: Two positive integers (max 20x20)
 - **Car ID**: Single character or string identifier
-- **Position**: x y coordinates (non-negative integers)
+- **Position**: x y coordinates (non-negative integers starting from 0)
 - **Direction**: N (North), S (South), E (East), W (West)
 - **Commands**: F (Forward), L (Left turn), R (Right turn)
 - **Empty Lines**: Optional between cars
+
+
+### Command Rules:
+- **L**: Rotates the car by 90 degrees to the left
+- **R**: Rotates the car by 90 degrees to the right
+- **F**: Moves forward by 1 grid point
 
 ## Running Tests
 
@@ -233,12 +233,6 @@ log_level = "critical"
 1. **Domain Layer**: Pure business logic, no external dependencies
 2. **Application Layer**: Use cases that orchestrate domain objects
 3. **Infrastructure**: External concerns (settings, I/O)
-
-### Key Design Patterns:
-- **Strategy Pattern**: For movement implementations
-- **Command Pattern**: For car command processing
-- **Factory Pattern**: For object creation
-- **Dependency Injection**: For loose coupling
 
 ## Collision Detection
 
